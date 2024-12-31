@@ -23,6 +23,10 @@ services:
       - FRONT_END_URLS=http://localhost:3001,http://localhost:3002
       - MIDTRANS_SERVER_KEY=
       - GOOGLE_TEXT_TO_SPEECH_API_KEY=
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_USER=
+      - SMTP_PASS=
     ports:
       - 3000:3000
       - 3030:3030
