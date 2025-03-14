@@ -1,7 +1,7 @@
 services:
   postgres17:
     image: postgres:17
-    container_name: postgres
+    # container_name: postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -11,15 +11,20 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data:rw
     restart: always
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: 1
+    #       memory: 50M
 
   backend:
-    container_name: backend
+    # container_name: backend
     build: https://github.com/SySafarila/engsel-backend.git#main
     environment:
       - DATABASE_URL=postgresql://postgres:password@postgres17:5432/engsel
       - JWT_SECRET=secret
-      - DEV_MODE=false
-      - BASE_URL=http://localhost:3000
+      - DEV_MODE=true
+      - BASE_URL=http://popular-spider-crisp.ngrok-free.app
       - FRONT_END_URLS=http://localhost:3001,http://localhost:3002
       - MIDTRANS_SERVER_KEY=
       - GOOGLE_TEXT_TO_SPEECH_API_KEY=
@@ -33,7 +38,11 @@ services:
     depends_on:
       - postgres17
     restart: always
-
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: 1
+    #       memory: 50M
   react:
     container_name: react
     build:
@@ -47,16 +56,16 @@ services:
     ports:
       - 3001:3000
     restart: always
+  # vue:
+  #   container_name: vue
+  #   build:
+  #     context: https://github.com/SySafarila/engsel-frontend-vue.git#main
+  #     args:
+  #       - BACKEND_URL=http://localhost:3000
+  #       - JWT_SECRET=secret
+  #   ports:
+  #     - 3002:3000
+  #   restart: always
 
-  vue:
-    container_name: vue
-    build:
-      context: https://github.com/SySafarila/engsel-frontend-vue.git#main
-      args:
-        - BACKEND_URL=http://localhost:3000
-        - JWT_SECRET=secret
-    ports:
-      - 3002:3000
-    restart: always
 volumes:
   pg-data:
